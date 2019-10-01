@@ -59,8 +59,3 @@ class Obstacle {
     this.crossable = true;
   }
 }
-
-function generate_character() {
-  var x = Math.random(0,64);
-  console.log(x);
-}

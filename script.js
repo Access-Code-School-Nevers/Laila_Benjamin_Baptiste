@@ -32,28 +32,28 @@ var terrain = new Terrain(columns,rows,tile_size);
 terrain.build();
 
 // var player = new Personnage();
-generate_character();
+random_position();
 
-document.addEventListener('keydown', function(event) {
-  switch (event.code) {
-    case 'ArrowUp':
-      player.moveUp();
-      break;
-    case 'ArrowLeft':
-      player.moveLeft();
-      break;
-    case 'ArrowRight':
-      player.moveRight();
-      break;
-    case 'ArrowDown':
-      player.moveDown();
-      break;
-    case 'space':
-      player.dropBomb();
-      break;
-
-
-    default:
-      break;
-  }
-}
+// document.addEventListener('keydown', function(event) {
+//   switch (event.code) {
+//     case 'ArrowUp':
+//       player.moveUp();
+//       break;
+//     case 'ArrowLeft':
+//       player.moveLeft();
+//       break;
+//     case 'ArrowRight':
+//       player.moveRight();
+//       break;
+//     case 'ArrowDown':
+//       player.moveDown();
+//       break;
+//     case 'space':
+//       player.dropBomb();
+//       break;
+//
+//
+//     default:
+//       break;
+//   }
+// }
