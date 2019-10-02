@@ -1,61 +1,77 @@
 class Personnage {
-  // constructeur de la class Personnage
-  constructor() {
-    // initialisation des attributs à la construction de l'objet
-    this.appearence = appearence;
-    this.pos_x = pos_x;
-    this.pos_y = pos_y;
+  constructor(terrain, id) {
+    this.appearence;
+    this.coord_x = 0;
+    this.coord_y = 0;
     this.alive = true;
+    this.terrain = terrain;
+    this.id = name;
+  }
+
+  set_id(id) {
+    this.id = id;
+  }
+
+  get_id() {
+    return this.id;
   }
 
   // définition des méthodes
-  getPosition() {
-    return array(this.pos_x, this.pos_y); // returns [24,12];
+  getCoords() {
+    return [this.coord_x, this.coord_y]; // returns [24,12];
   }
 
-  setPosition(pos_arr) { // example setPosition([32,64]);
-    this.pos_x = pos_arr[0];
-    this.pos_y = pos_arr[1];
+  setCoords(coord_arr) { // example setCoords([32,64]);
+    this.coord_x = coord_arr[0];
+    this.coord_y = coord_arr[1];
   }
 
-  moveUp(){
-    var position = getPosition();
-    setPosition(this.pos_x,this.pos_y-1);
-  }
-  moveLeft(){
-    var position = getPosition();
-    setPosition(this.pos_x-1,this.pos_y);
-  }
-  moveRight(){
-    var position = getPosition();
-    setPosition(this.pos_x+1,this.pos_y);
-  }
-  moveDown(){
-    var position = getPosition();
-    setPosition(this.pos_x,this.pos_y+1);
-  }
-  dropBomb(){
-    var bomb = new Bomb(getPosition);
-  }
-}
+  spawn(pos) {
+    this.setCoords(pos);
 
-class Tile {
-  contructor(appearence, width, height, pos_x, pos_y) {
-    this.appearence = appearence;
-    this.width = width;
-    this.height = height;
-    this.pos_x = pos_x;
-    this.pos_y = pos_y;
-  }
-}
+    let terrain = this.terrain.getTerrain();
+    let player = document.createElement('div');
 
-class Obstacle {
-  contructor(appearence, width, height, pos_x, pos_y) {
-    this.appearence = appearence;
-    this.width = width;
-    this.height = height;
-    this.pos_x = pos_x;
-    this.pos_y = pos_y;
-    this.crossable = true;
+    player.style.width = new String(this.terrain.tile_size) + "px";
+    player.style.height = new String(this.terrain.tile_size) + "px";
+    player.style.left = new String(pos[0] * this.terrain.tile_size) + "px";
+    player.style.top = new String(pos[1] * this.terrain.tile_size) + "px";
+    player.style.position = 'absolute';
+    player.style.zIndex = '2';
+    player.style.backgroundColor = "#000";
+    player.id = this.id;
+
+    terrain.appendChild(player);
+  }
+
+  moveUp() {
+    if(this.coord_y > 0 && !this.terrain.compareWallsCoords([this.coord_x, this.coord_y - 1])) {
+        this.setCoords([this.coord_x, this.coord_y - 1]);
+    }
+  }
+
+  moveLeft() {
+    if(this.coord_x > 0 && !this.terrain.compareWallsCoords([this.coord_x - 1, this.coord_y])) {
+      this.setCoords([this.coord_x - 1, this.coord_y]);
+    }
+  }
+
+  moveRight() {
+    if(this.coord_x < this.terrain.grid_x-1 && !this.terrain.compareWallsCoords([this.coord_x + 1 , this.coord_y])) {
+      this.setCoords([this.coord_x + 1 , this.coord_y]);
+    }
+  }
+
+  moveDown() {
+    if(this.coord_y < this.terrain.grid_y-1 && !this.terrain.compareWallsCoords([this.coord_x, this.coord_y + 1])) {
+      this.setCoords([this.coord_x, this.coord_y + 1]);
+    }
+  }
+
+  dropBomb() {
+    var bomb = new Bomb(this.terrain,this.getCoords(),(this.id + "_bomb"));
+    bomb.plant();
+    setTimeout(function() {bomb.explode()}, 1000);
+
   }
 }

@@ -4,35 +4,53 @@ class Terrain {
     this.grid_y = grid_y;
     this.tile_size = tile_size;
     this.terrain = new Array([this.grid_x, this.grid_y]);
+    this.walls = new Array();
+    this.destructableWalls = new Array();
+    this.bombs = new Array();
   }
 
   //terrain construction
   build() {
+    let body = document.getElementsByTagName('body')[0];
+    let terrain = document.createElement('div');
+    terrain.style.position = 'absolute';
+
+    terrain.id = "terrain";
+
     for(var i = 0; i < this.grid_y; i++) {
       for (var j = 0; j < this.grid_x; j++) {
-        // récupérer élément "terrain" du html
-        var terrain = document.getElementById('terrain');
-        // créer variable à ajouter au terrain
-        var square = document.createElement('div');
-        // définir style du bloc à ajouter
+        let square = document.createElement('div');
         square.style.width= new String(this.tile_size)+"px";
         square.style.height= new String(this.tile_size)+"px";
         square.style.left=new String(j*this.tile_size)+"px";
         square.style.top=new String(i*this.tile_size)+"px";
         square.style.position='absolute';
-        terrain.appendChild(square);
-        //obstacles
+        square.style.zIndex='1';
+
         if(j%2==1 && i%2==1){
-          // obstacle quand x et y sont impairs
-          // var obs = new Obstacle("img/obstacle.jpg",32,32,i,j);
           square.style.backgroundColor="#555";
-          // this.terrain[i,j] = obs;
+          this.walls.push([j,i]);
         } else {
-          //normal quand x et y sont pairs
-          // this.terrain[i,j] = new Tile("img/terrain_tile.jpg",32,32,i,j);
-          square.style.backgroundColor="#0f0";
+          square.style.backgroundColor="#0c0";
         }
+        terrain.appendChild(square);
+        body.appendChild(terrain);
       }
+    }
+  }
+
+  getTerrain() {
+    return document.getElementById('terrain');
+  }
+
+  compareWallsCoords(coords) {
+      if (this.walls[0].length == coords.length) {
+      for(let i = 0; i < this.walls.length; i++) {
+          if(this.walls[i][0] == coords[0] && this.walls[i][1] == coords[1]) {
+            return true;
+          }
+      }
+      return false;
     }
   }
 }
